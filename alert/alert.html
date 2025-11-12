@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+        }
+
+        main {
+            background-color: rgb(39, 1, 1);
+            width: 40%;
+            margin: 200px auto;
+            gap: 2em;
+            padding: 20px;
+            box-shadow: 1px 4px 6px 1px #8a8989;
+            border-radius: 10px;
+        }
+
+        .bb {
+            display: flex;
+            width: 80%;
+            margin: auto;
+            gap: 1em;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 40px;
+            color: #b1afaf;
+            font-weight: 600;
+
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        .nn {
+            width: 60%;
+            background-color: white;
+            margin: 40px auto;
+            padding: 10px;
+            border-radius: 2px;
+        }
+        h2{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <div class="bb"><button onclick="login()">Log In</button>
+            <button onclick="Delete()">Delete</button>
+            <button onclick="change()">Update Username</button>
+        </div>
+        <div class="nn">
+            <h3 id="delete"></h3>
+            <h2 id="User"></h2>
+        </div>
+    </main>
+
+
+</body>
+<script>
+    function login() {
+
+
+        let currentUserName = "user";
+        let message = `welcome back ${currentUserName}`;
+        alert(message);
+        let nameDisplay = document.getElementById('User');
+        nameDisplay.innerText = message;
+        
+
+    }
+
+    function Delete() {
+        let deleted = confirm("are you sure you want to delete your account?");
+        if (deleted) {
+
+            // let display = document.getElementById("delete");
+            // display.innerHTML = "Acount deleted succesfully";
+            alert("account deleted succesfully")
+
+        }
+
+    }
+    function change() {
+
+        let currentUserName = document.getElementById("User");
+        currentUserName = "Migos";
+        let change = prompt("input your new username", currentUserName).trim();
+        console.log(change);
+        if (change.toLowerCase() === currentUserName.toLowerCase()) {
+            alert(`you cannot use your existing, ${currentUserName} again`);
+        } else if (!change) {
+            console.log("had a change of mind?");
+
+        } else {
+            alert("username changed sucessfully")
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>
