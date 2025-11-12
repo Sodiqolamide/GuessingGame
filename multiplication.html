@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .display {
+            width: 50%;
+            margin: 20px auto;
+            background: #dbd8d8;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .displaydiv {
+            background-color: white;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 50px;
+            border-radius: 10px;
+            align-items: center;
+            color: rgb(121, 207, 178);
+            box-shadow: 0px 0px 20px 5px rgb(121, 207, 178);
+            text-align: center;
+
+            @media(max-width:425px) {
+                width: fit-content;
+                padding: none;
+                box-shadow: 0px 0px 5px 3px rgb(121, 207, 178);
+            }
+        }
+
+        .container {
+            width: fit-content;
+            background-color: white;
+            margin: 100px auto;
+            padding: 50px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 5px 6px 20px 3px rgb(121, 207, 178);
+
+            @media(max-width: 425px) {
+                margin: 70px auto;
+                width: fit-content;
+                display: flex;
+                flex-direction: column;
+                padding: none;
+            }
+
+            @media(max-width:360px) {
+                margin: 70px auto;
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                padding: none;
+            }
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 4px;
+            border: .5px solid rgb(121, 207, 178);
+
+            @media(min-width:360px), (max-width: 425px) {
+                margin-top: 10px;
+                padding: none;
+                border-radius: 4px;
+                display: flex;
+                flex-direction: column;
+                border: .5px solid rgb(121, 207, 178);
+
+            }
+
+        }
+
+        button {
+            padding: 10px 172px;
+            border: none;
+            background-color: rgb(121, 207, 178);
+            border-radius: 5px;
+            color: white;
+            font-weight: 600;
+            margin-top: 40px;
+
+            @media(min-width:360px), (max-width: 425px) {
+                padding: 10px 50px;
+                text-wrap: nowrap;
+
+            }
+
+        }
+
+        .display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .display h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .display p {
+            margin: 2px 0;
+        }
+
+        /* @media(min-width:360px), (max-width: 425px) {
+            .container {
+                margin: 70px auto;
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                padding: none;
+
+            }
+
+            button {
+                padding: 10px 50px;
+                text-wrap: nowrap;
+
+            }
+
+            input {
+                margin-top: 10px;
+                padding: none;
+                border-radius: 4px;
+                display: flex;
+                flex-direction: column;
+                border: .5px solid rgb(121, 207, 178);
+            }
+
+            .displaydiv {
+                width: 50%;
+                padding: none;
+                box-shadow: 0px 0px 5px 3px rgb(121, 207, 178);
+            }
+
+        } */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <input type="text" id="addinp">
+        <input type="text" id="addinp2">
+        <br>
+        <button onclick="add()">click me</button>
+    </div>
+    <div class="displaydiv">
+        <h3 id="display" style="width: fit-width;"></h3>
+
+
+    </div>
+</body>
+<script>
+    function add() {
+
+        let myNum1 = document.getElementById('addinp');
+        myNum1 = myNum1.value;
+        let myNum2 = document.getElementById('addinp2');
+        myNum2 = myNum2.value;
+        let display = document.getElementById('display');
+        display.innerHTML = "";
+        if (myNum1 === "" || myNum2 === "") {
+            alert('input a valid number')
+
+        } if (isNaN(myNum1) || isNaN(myNum2)) {
+            alert('not a number')
+
+        }
+        myNum1 = +myNum1;
+        myNum2 = +myNum2;
+
+        if (myNum1 < myNum2) {
+            for (let firstVal = +myNum1; firstVal <= +myNum2; firstVal++) {
+                display.innerHTML += ` Multiplication table of ${firstVal}`;
+                display.style.color = "black";
+                 display.innerHTML += "<hr>"
+
+
+
+                for (let index = 1; index <= 12; index++) {
+
+                    display.innerHTML += `<p>${firstVal}  X ${index} = ${firstVal * index}</p>`;
+                    display.style.color = "green";
+
+
+
+
+                }
+
+
+
+            }
+
+            myNum1.value = "";
+            myNum2 = "";
+
+
+        } else {
+            for (let firstVal = +myNum1; firstVal >= +myNum2; firstVal--) {
+                
+                console.log(`Multiplication table of ${firstVal}`);
+
+                for (let index = 1; index <= 12; index++) {
+
+                    display.innerHTML += `<p>${firstVal}X${index}=${firstVal * index}</p>`;
+                     display.innerHTML += "<hr>"
+
+
+                }
+
+                display.innerHTML += "<hr>"
+
+            }
+        }
+    }
+
+
+
+
+
+
+</script>
+
+</html>
