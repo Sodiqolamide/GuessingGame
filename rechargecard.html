@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recharge Card Generator</title>
+    <style>
+        :root {
+            --bg-color: #eef2f3;
+            --main-bg: #fff;
+            --text-color: #222;
+            --btn-bg: #0056b3;
+            --btn-hover: #003d80;
+            --used-color: #c0392b;
+            --active-color: #27ae60;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #333333;
+            --main-bg: #f5f5f5;
+            --text-color: #111111;
+            --btn-bg: #0078d7;
+            --btn-hover: #0056b3;
+            --used-color: #a83232;
+            --active-color: #219653;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        main {
+            background: var(--main-bg);
+            padding: 25px;
+            border-radius: 10px;
+            width: 85%;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select,
+        button,
+        input,
+        #display,
+        table {
+            color: var(--text-color);
+            background: var(--main-bg);
+        }
+
+        select,
+        button,
+        input {
+            padding: 10px;
+            margin: 6px 4px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        button {
+            background: var(--btn-bg);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--btn-hover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px 8px;
+            text-align: center;
+            
+        }
+
+        th {
+            background: #f7f9fc;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .used {
+            color: var(--used-color);
+            font-weight: bold;
+        }
+
+        .active {
+            color: var(--active-color);
+            font-weight: bold;
+        }
+
+        #display {
+            border-left: 4px solid #0078d7;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            overflow-wrap: break-word;
+        }
+
+        #balance {
+            margin-top: 15px;
+        }
+
+        .theme-toggle {
+            float: right;
+            margin-bottom: 10px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            background: var(--btn-bg);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @media (max-width: 767px) {
+            main {
+                width: 95%;
+                padding: 15px;
+            }
+
+            select,
+            button,
+            input {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 5px 0;
+            }
+
+            .theme-toggle {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        @media (max-width: 480px) and (min-width: 360px) {
+            main {
+                width: 90%;
+                padding: 15px;
+            }
+
+           
+            input {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 5px 0;
+            }
+             select,
+            button{
+                font-size: 1.6em;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .theme-toggle {
+                width: 100px;
+                margin-bottom: 10px;
+                text-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="theme-toggle" onclick="toggleTheme()">Toggle Theme</div>
+        <h2>Recharge Card Generator</h2>
+
+        <button onclick="generatePin()">Generate</button>
+
+        <select id="amount">
+            <option value="">Select Amount</option>
+            <option value="100">₦100</option>
+            <option value="200">₦200</option>
+            <option value="500">₦500</option>
+            <option value="1000">₦1000</option>
+        </select>
+
+        <select id="network">
+            <option value="">Select Network</option>
+            <option value="MTN">MTN</option>
+            <option value="GLO">GLO</option>
+            <option value="AIRTEL">AIRTEL</option>
+            <option value="9MOBILE">9MOBILE</option>
+        </select>
+
+        <div id="display"></div>
+
+        <input id="inp" placeholder="Enter PIN to Load">
+        <button onclick="load()">Load</button>
+
+        <h2 id="balance">Balance: ₦0.00</h2>
+
+        <table id="cardTable">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Network</th>
+                    <th>Amount</th>
+                    <th>Pin</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Date Used</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </main>
+
+    <script>
+     
+        let cards = JSON.parse(localStorage.getItem('cards')) || [];
+        let serialNumber = cards.length ? Math.max(...cards.map(c => c.serialNumber)) : 0;
+        let myBalance = parseFloat(localStorage.getItem('balance')) || 0;
+
+        const balanceElem = document.getElementById('balance');
+        balanceElem.innerHTML = `Balance: ₦${myBalance.toFixed(2)}`;
+
+      
+        const storedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', storedTheme);
+
+        displayCards();
+
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function generatePin() {
+            const amount = document.getElementById('amount').value;
+            const network = document.getElementById('network').value;
+            const display = document.getElementById('display');
+
+            if (!amount || !network) {
+                alert("Please select both network and amount");
+                return;
+            }
+
+            let pin = "";
+            for (let i = 0; i < 16; i++) {
+                pin += Math.floor(Math.random() * 10);
+            }
+
+            serialNumber++;
+
+            const card = {
+                serialNumber,
+                network,
+                amount,
+                pin,
+                status: "Unused",
+                dateCreated: new Date().toLocaleString(),
+                dateUsed: ""
+            };
+
+            cards.push(card);
+            localStorage.setItem('cards', JSON.stringify(cards));
+
+            display.innerHTML += `<p>${serialNumber}. You generated ${network} ₦${amount} PIN: ${pin}</p>`;
+            displayCards();
+        }
+
+        function load() {
+            const inputPin = document.getElementById('inp').value.trim();
+
+            if (!inputPin) {
+                alert("Please enter a PIN to load.");
+                return;
+            }
+
+            const card = cards.find(c => c.pin === inputPin);
+
+            if (!card) {
+                alert("Invalid PIN entered!");
+                return;
+            }
+
+            if (card.status === "Used") {
+                alert("This PIN has already been used!");
+                return;
+            }
+
+            card.status = "Used";
+            card.dateUsed = new Date().toLocaleString();
+            myBalance += parseFloat(card.amount);
+
+            localStorage.setItem('cards', JSON.stringify(cards));
+            localStorage.setItem('balance', myBalance);
+
+            balanceElem.innerHTML = `Balance: ₦${myBalance.toFixed(2)}`;
+            alert(`Recharge successful! ₦${card.amount} added to your balance.`);
+            displayCards();
+        }
+
+        function displayCards() {
+            const tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = "";
+
+            cards.forEach(card => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${card.serialNumber}</td>
+                    <td>${card.network}</td>
+                    <td>₦${card.amount}</td>
+                    <td>${card.pin}</td>
+                    <td class="${card.status === "Used" ? "used" : "active"}">${card.status}</td>
+                    <td>${card.dateCreated}</td>
+                    <td>${card.dateUsed}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+
+</html>
